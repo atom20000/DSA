@@ -1,8 +1,9 @@
 from math import log
+from random import randrange
 
 class PrimeNumber():
     
-    def __init__(self, num):
+    def __init__(self, num = 1000):
         self.sieve = self.sieve_eratosthenes(num)
     
     def sieve_eratosthenes(self, n): #решето Эратосфена
@@ -40,9 +41,9 @@ class PrimeNumber():
                 return False
         return True
 
-    def test_is_prime_miller(self, num, sieve):
-        if not self.test_trial_division_prime(num, sieve):
-            return False
+    def test_is_prime_miller(self, num): # тест Миллера
+        #if not self.test_trial_division_prime(num, sieve):
+        #    return False
         logN = log(num)
         loglogN = log(logN)
         maxChecked = logN * loglogN / log(2)
@@ -56,20 +57,69 @@ class PrimeNumber():
             baseCurrent = self.__next_prime(baseCurrent)
         return isPrime
 
-    def find_number_p(self, num):
-        #mul = 2
-        #while True:
-        #    n = num * mul + 1
-        #    if self.test_is_prime_miller(n, self.sieve) and len(bin(n)[2:]):
-        #        return n
-        #    mul+=1
-        #for i in range(2**1023, 2**1024):
-        #    if self.test_is_prime_miller(i, self.sieve) and (i-1)%num == 0:
-        #        return i
-        #for i in range(2**1023, 2**1024):
-        #    if self.test_is_prime_miller(i, self.sieve) and pow(i, num - 1, num) == 1:
-        #        return i
-        pass
+    def test_solovay_strassen(self, num, iconfidence= 3):# тест Соловая-Штрасса 
+        for i in range(iconfidence):
+            a = randrange(1, num)
+            if self.__gcd(a, num) > 1:
+                return False
+            if not self.__jacobi(a, num) % num == pow(a, (num - 1)//2,num):
+                return False
+        return True
+
+    def modinv(self, a, m):
+        g, x, y = self.__interactive_egcd(a,m)
+        if g != 1:
+            return None
+        else:
+            return x % m
+    
+    def __interactive_egcd(self, a, b):
+        x,y, u,v = 0,1, 1,0
+        while a != 0:
+            q,r = b//a,b%a; m,n = x-u*q,y-v*q # use x//y for floor "floor division"
+            b,a, x,y, u,v = a,r, u,v, m,n
+        return b, x, y
+
+    def is_prime(self, num, iter = 10):# проверка числа на простоту 2 способами
+        if  self.test_is_prime_miller(num):
+            return True
+        return False
+        
+    def __jacobi(self, a, n):
+        if a == 0:
+            if n == 1:
+                return 1
+            else:
+                return 0
+        elif a == -1:
+            if n%2 == 0:
+                return 1
+            else:
+                return -1
+        elif a == 1:
+            return 1
+        elif a == 2:
+            if n % 8 == 1 or n % 8 == 7:
+                return 1
+            elif n % 8 == 3 or n % 8 == 5:
+                return -1
+        elif a >= n:
+            return self.__jacobi(a%n, n)
+        elif a%2 == 0:
+            return self.__jacobi(2, n) * self.__jacobi(a//2, n)
+        else:
+            if a % 4 == 3 and n % 4 == 3:
+                return -1 * self.__jacobi(n, a)
+            else:
+                return self.__jacobi(n, a)
+
+    def __gcd(self, a, b):
+        while b!=0:
+            c = a % b
+            a = b
+            b = c
+        return a
+
 
     def __is_strong_pseudo_prime(self, num, baseCurrent):
         exp = num - 1
@@ -93,18 +143,17 @@ class PrimeNumber():
         return self.sieve[self.sieve.index(num)+1]
 
 if __name__ == '__main__':
-    import random
     #print(test_trial_division(5, sieve_eratosthenes(1000)))
     tests = PrimeNumber(1000)
     n = 0
     while True:
-        n = random.randint(2**159, 2**160 - 1)
+        n = randrange(2**511, 2**512)
         #n = random.randint(2**511, 2**1024 - 1)
-        if tests.test_is_prime_miller(n, tests.sieve):#tests.test_trial_division_prime(n, tests.sieve): 
+        if tests.is_prime(n):#tests.test_trial_division_prime(n, tests.sieve): 
         #if is_prime_miller(n, sieve):
-            print('простое', len(bin(n)[2:]))
+            print('простое', n)
             break
         #print(n)
     #print(prime_factor())
-    p = tests.find_number_p(n)
-    print('q=', n, '\np=', p)
+    #p = tests.find_number_p(n)
+    #print('q=', n, '\np=', p)
