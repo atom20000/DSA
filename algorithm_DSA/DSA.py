@@ -132,7 +132,7 @@ if __name__ == '__main__':
     p, q, g = dsa.generate_params(L, N)
     x, y = dsa.generate_keys()
     
-    text = "MISIS rocks"
+    text = "ASCII"
     M = str.encode(text, "ascii")
     r, s = dsa.sign(M)
     if dsa.verify(M, r, s):
