@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>MainWindow</class>
- <widget class="QMainWindow" name="MainWindow">
+ <class>DSA</class>
+ <widget class="QMainWindow" name="DSA">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -11,12 +11,18 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>MainWindow</string>
+   <string>DSA</string>
   </property>
   <widget class="QWidget" name="centralwidget">
    <layout class="QGridLayout" name="gridLayout_4">
     <item row="0" column="0">
      <widget class="QStackedWidget" name="stackedWidget">
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
       <property name="currentIndex">
        <number>2</number>
       </property>
@@ -40,8 +46,32 @@
       </widget>
       <widget class="QWidget" name="pageSender">
        <layout class="QGridLayout" name="gridLayout_3">
-        <item row="9" column="0" colspan="3">
-         <widget class="QLabel" name="senderMessage">
+        <property name="horizontalSpacing">
+         <number>6</number>
+        </property>
+        <item row="1" column="0">
+         <widget class="QPushButton" name="generateParamsButton">
+          <property name="text">
+           <string>Сгенерировать общие параметры</string>
+          </property>
+         </widget>
+        </item>
+        <item row="12" column="0" rowspan="2">
+         <widget class="QPushButton" name="signButton">
+          <property name="text">
+           <string>Подписать</string>
+          </property>
+         </widget>
+        </item>
+        <item row="7" column="0">
+         <widget class="QPushButton" name="saveKeysButton">
+          <property name="text">
+           <string>Сохранить ключи</string>
+          </property>
+         </widget>
+        </item>
+        <item row="4" column="0">
+         <widget class="QLabel" name="senderKeys">
           <property name="sizePolicy">
            <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
             <horstretch>0</horstretch>
@@ -58,18 +88,46 @@
            <number>-2</number>
           </property>
           <property name="text">
-           <string>Ввод сообщения</string>
+           <string>Ключи отправителя</string>
           </property>
          </widget>
         </item>
-        <item row="5" column="0">
-         <widget class="QPushButton" name="generateKeysButton">
+        <item row="1" column="1">
+         <widget class="QPushButton" name="p_checkButton">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
           <property name="text">
-           <string>Сгенерировать ключи</string>
+           <string>!</string>
           </property>
          </widget>
         </item>
-        <item row="2" column="1" colspan="2">
+        <item row="1" column="2">
+         <widget class="QLabel" name="p_sender">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="font">
+           <font>
+            <weight>75</weight>
+            <bold>true</bold>
+           </font>
+          </property>
+          <property name="lineWidth">
+           <number>-2</number>
+          </property>
+          <property name="text">
+           <string>p:</string>
+          </property>
+         </widget>
+        </item>
+        <item row="2" column="2">
          <widget class="QLabel" name="q_sender">
           <property name="sizePolicy">
            <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
@@ -91,17 +149,61 @@
           </property>
          </widget>
         </item>
-        <item row="2" column="0">
-         <widget class="QPushButton" name="uploadParamsButton">
+        <item row="8" column="0">
+         <widget class="QPushButton" name="generateKButton">
           <property name="text">
-           <string>Загрузить общие параметры</string>
+           <string>Сгенерировать k</string>
           </property>
          </widget>
         </item>
-        <item row="14" column="0">
-         <widget class="QPushButton" name="saveButton">
+        <item row="5" column="0">
+         <widget class="QPushButton" name="generateKeysButton">
           <property name="text">
-           <string>Сохранить</string>
+           <string>Сгенерировать ключи</string>
+          </property>
+         </widget>
+        </item>
+        <item row="11" column="0">
+         <widget class="QLabel" name="senderMessageHash">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="font">
+           <font>
+            <weight>75</weight>
+            <bold>true</bold>
+           </font>
+          </property>
+          <property name="lineWidth">
+           <number>-2</number>
+          </property>
+          <property name="text">
+           <string>Хэш сообщения:</string>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="0">
+         <widget class="QLabel" name="senderParams">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="font">
+           <font>
+            <weight>75</weight>
+            <bold>true</bold>
+           </font>
+          </property>
+          <property name="lineWidth">
+           <number>-2</number>
+          </property>
+          <property name="text">
+           <string>Общие параметры</string>
           </property>
          </widget>
         </item>
@@ -112,15 +214,28 @@
           </property>
          </widget>
         </item>
-        <item row="12" column="0" rowspan="2">
-         <widget class="QPushButton" name="signButton">
+        <item row="2" column="0">
+         <widget class="QPushButton" name="uploadParamsButton">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
           <property name="text">
-           <string>Подписать</string>
+           <string>Загрузить общие параметры</string>
           </property>
          </widget>
         </item>
-        <item row="1" column="1" colspan="2">
-         <widget class="QLabel" name="p_sender">
+        <item row="6" column="0">
+         <widget class="QPushButton" name="uploadKeysButton">
+          <property name="text">
+           <string>Загрузить ключи</string>
+          </property>
+         </widget>
+        </item>
+        <item row="9" column="0">
+         <widget class="QLabel" name="senderMessage">
           <property name="sizePolicy">
            <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
             <horstretch>0</horstretch>
@@ -137,90 +252,33 @@
            <number>-2</number>
           </property>
           <property name="text">
-           <string>p:</string>
-          </property>
-         </widget>
-        </item>
-        <item row="14" column="1" colspan="2">
-         <widget class="QLabel" name="s_sender">
-          <property name="sizePolicy">
-           <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-            <horstretch>0</horstretch>
-            <verstretch>0</verstretch>
-           </sizepolicy>
-          </property>
-          <property name="font">
-           <font>
-            <weight>75</weight>
-            <bold>true</bold>
-           </font>
-          </property>
-          <property name="lineWidth">
-           <number>-2</number>
-          </property>
-          <property name="text">
-           <string>s:</string>
-          </property>
-         </widget>
-        </item>
-        <item row="12" column="1" colspan="2">
-         <widget class="QLabel" name="senderSignature">
-          <property name="sizePolicy">
-           <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-            <horstretch>0</horstretch>
-            <verstretch>0</verstretch>
-           </sizepolicy>
-          </property>
-          <property name="font">
-           <font>
-            <weight>75</weight>
-            <bold>true</bold>
-           </font>
-          </property>
-          <property name="lineWidth">
-           <number>-2</number>
-          </property>
-          <property name="text">
-           <string>Подпись</string>
-          </property>
-         </widget>
-        </item>
-        <item row="1" column="0">
-         <widget class="QPushButton" name="generateParamsButton">
-          <property name="text">
-           <string>Сгенерировать общие параметры</string>
-          </property>
-         </widget>
-        </item>
-        <item row="7" column="0">
-         <widget class="QPushButton" name="saveKeysButton">
-          <property name="text">
-           <string>Сохранить ключи</string>
+           <string>Ввод сообщения</string>
           </property>
          </widget>
         </item>
         <item row="10" column="0" colspan="3">
          <widget class="QTextEdit" name="textMessageSender"/>
         </item>
-        <item row="13" column="1" colspan="2">
-         <widget class="QLabel" name="r_sender">
+        <item row="14" column="0">
+         <widget class="QPushButton" name="saveButton">
+          <property name="text">
+           <string>Сохранить</string>
+          </property>
+         </widget>
+        </item>
+        <item row="2" column="1">
+         <widget class="QPushButton" name="q_checkButton">
           <property name="sizePolicy">
-           <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+           <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
             <horstretch>0</horstretch>
             <verstretch>0</verstretch>
            </sizepolicy>
           </property>
-          <property name="font">
-           <font>
-            <weight>75</weight>
-            <bold>true</bold>
-           </font>
-          </property>
-          <property name="lineWidth">
-           <number>-2</number>
+          <property name="layoutDirection">
+           <enum>Qt::LeftToRight</enum>
           </property>
           <property name="text">
-           <string>r:</string>
+           <string>!</string>
           </property>
          </widget>
         </item>
@@ -246,8 +304,8 @@
           </property>
          </widget>
         </item>
-        <item row="11" column="0" colspan="3">
-         <widget class="QLabel" name="senderMessageHash">
+        <item row="7" column="1" colspan="2">
+         <widget class="QLabel" name="senderPrivatKey">
           <property name="sizePolicy">
            <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
             <horstretch>0</horstretch>
@@ -264,43 +322,7 @@
            <number>-2</number>
           </property>
           <property name="text">
-           <string>Хэш сообщения:</string>
-          </property>
-         </widget>
-        </item>
-        <item row="6" column="0">
-         <widget class="QPushButton" name="uploadKeysButton">
-          <property name="text">
-           <string>Загрузить ключи</string>
-          </property>
-         </widget>
-        </item>
-        <item row="3" column="1" colspan="2">
-         <widget class="QLabel" name="g_sender">
-          <property name="sizePolicy">
-           <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-            <horstretch>0</horstretch>
-            <verstretch>0</verstretch>
-           </sizepolicy>
-          </property>
-          <property name="font">
-           <font>
-            <weight>75</weight>
-            <bold>true</bold>
-           </font>
-          </property>
-          <property name="lineWidth">
-           <number>-2</number>
-          </property>
-          <property name="text">
-           <string>g:</string>
-          </property>
-         </widget>
-        </item>
-        <item row="8" column="0">
-         <widget class="QPushButton" name="generateKButton">
-          <property name="text">
-           <string>Сгенерировать k</string>
+           <string>Закрытый ключ:</string>
           </property>
          </widget>
         </item>
@@ -326,8 +348,8 @@
           </property>
          </widget>
         </item>
-        <item row="4" column="0" colspan="3">
-         <widget class="QLabel" name="senderKeys">
+        <item row="12" column="1" colspan="2">
+         <widget class="QLabel" name="senderSignature">
           <property name="sizePolicy">
            <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
             <horstretch>0</horstretch>
@@ -344,12 +366,12 @@
            <number>-2</number>
           </property>
           <property name="text">
-           <string>Ключи отправителя</string>
+           <string>Подпись</string>
           </property>
          </widget>
         </item>
-        <item row="0" column="0" colspan="3">
-         <widget class="QLabel" name="senderParams">
+        <item row="13" column="1" colspan="2">
+         <widget class="QLabel" name="r_sender">
           <property name="sizePolicy">
            <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
             <horstretch>0</horstretch>
@@ -366,12 +388,12 @@
            <number>-2</number>
           </property>
           <property name="text">
-           <string>Общие параметры</string>
+           <string>r:</string>
           </property>
          </widget>
         </item>
-        <item row="7" column="1">
-         <widget class="QLabel" name="senderPrivatKey">
+        <item row="14" column="1" colspan="2">
+         <widget class="QLabel" name="s_sender">
           <property name="sizePolicy">
            <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
             <horstretch>0</horstretch>
@@ -388,7 +410,29 @@
            <number>-2</number>
           </property>
           <property name="text">
-           <string>Закрытый ключ:</string>
+           <string>s:</string>
+          </property>
+         </widget>
+        </item>
+        <item row="3" column="2">
+         <widget class="QLabel" name="g_sender">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="font">
+           <font>
+            <weight>75</weight>
+            <bold>true</bold>
+           </font>
+          </property>
+          <property name="lineWidth">
+           <number>-2</number>
+          </property>
+          <property name="text">
+           <string>g:</string>
           </property>
          </widget>
         </item>
@@ -574,6 +618,12 @@
         </item>
         <item row="1" column="1" colspan="3">
          <widget class="QLabel" name="p_Reciever">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
           <property name="font">
            <font>
             <weight>75</weight>
@@ -614,6 +664,12 @@
         </item>
         <item row="2" column="0" rowspan="2">
          <widget class="QPushButton" name="uploadParamsKeyButton">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
           <property name="text">
            <string>Загрузить параметры и ключ</string>
           </property>

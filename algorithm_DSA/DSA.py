@@ -137,4 +137,4 @@ if __name__ == '__main__':
     r, s = dsa.sign(M)
     if dsa.verify(M, r, s):
         print('All ok')
-    print(M, r, s, p, q, g, y, x, sep='\n')
+    print(M, r, s, p, q, g, 'Открытый\n', y, 'Закрытый\n', x, sep='\n')
