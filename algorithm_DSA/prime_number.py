@@ -41,7 +41,7 @@ class PrimeNumber():
                 return False
         return True
 
-    def test_is_prime_miller(self, num): # тест Миллера
+    def test_miller(self, num): # тест Миллера
         #if not self.test_trial_division_prime(num, sieve):
         #    return False
         logN = log(num)
@@ -56,6 +56,33 @@ class PrimeNumber():
                 break
             baseCurrent = self.__next_prime(baseCurrent)
         return isPrime
+
+    def test_miller_rabin(self, num, iconfidence= 40):
+        if  num == 2:
+            return True
+        if  num % 2 == 0:
+            return False
+        r, s = 0, num - 1
+        while s % 2 == 0:
+            r += 1
+            s //= 2
+        for _ in range(iconfidence):
+            a = randrange(2,  num - 1)
+            x = pow(a, s, num)
+            if x == 1 or x == num - 1:
+                continue
+            for _ in range(r - 1):
+                x = pow(x, 2, num)
+                if x == num - 1:
+                    break
+            else:
+                return False
+        return True
+
+    def is_prime(self, num, iter = 40):# проверка числа на простоту 2 способами
+        if  self.test_miller_rabin(num, iter) and self.test_miller(num):
+            return True
+        return False
 
     def test_solovay_strassen(self, num, iconfidence= 3):# тест Соловая-Штрасса 
         for i in range(iconfidence):
@@ -80,11 +107,6 @@ class PrimeNumber():
             b,a, x,y, u,v = a,r, u,v, m,n
         return b, x, y
 
-    def is_prime(self, num, iter = 10):# проверка числа на простоту 2 способами
-        if  self.test_is_prime_miller(num):
-            return True
-        return False
-        
     def __jacobi(self, a, n):
         if a == 0:
             if n == 1:
@@ -120,7 +142,6 @@ class PrimeNumber():
             b = c
         return a
 
-
     def __is_strong_pseudo_prime(self, num, baseCurrent):
         exp = num - 1
         ost_1 = exp
@@ -146,14 +167,17 @@ if __name__ == '__main__':
     #print(test_trial_division(5, sieve_eratosthenes(1000)))
     tests = PrimeNumber(1000)
     n = 0
-    while True:
-        n = randrange(2**511, 2**512)
+    #while True:
+        #n = randrange(2**511, 2**512)
         #n = random.randint(2**511, 2**1024 - 1)
+    for n in [16850784224551826771, 14042614733540932519]:
         if tests.is_prime(n):#tests.test_trial_division_prime(n, tests.sieve): 
         #if is_prime_miller(n, sieve):
             print('простое', n)
-            break
+            #break
         #print(n)
+        else:
+            print('составное', n)
     #print(prime_factor())
     #p = tests.find_number_p(n)
     #print('q=', n, '\np=', p)

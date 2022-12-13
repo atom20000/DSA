@@ -1,15 +1,18 @@
 from random import randrange
 from hashlib import sha1
-from prime_number import PrimeNumber
+from algorithm_DSA.prime_number import PrimeNumber
 
 class DSA():
 
-    def __init__(self, p=None, q=None ,g=None, y=None, x=None, num=1000) -> None:
+    def __init__(self, p=None, q=None ,g=None, y=None, x=None, r=None, s=None, num=1000) -> None:
         self.p = p
         self.q = q
         self.g = g
         self.x = x
         self.y = y
+        self.r = r
+        self.s = s
+        self.v = None
         self.test = PrimeNumber(num)
 
     def __generate_p_q(self, L = 1024, N = 160):
@@ -77,14 +80,14 @@ class DSA():
             return True
         return False
 
-    def __validate_sign(self, r, s):
-        if r < 0 and r > self.q:
+    def __validate_sign(self):
+        if self.r < 0 and self.r > self.q:
             return False
-        if s < 0 and s > self.q:
+        if self.s < 0 and self.s > self.q:
             return False
         return True
 
-    def generate_params(self, L = 128, N = 20):
+    def generate_params(self, L = 1024, N = 160):
         self.__generate_p_q(L, N)
         self.__generate_g()
         return self.p, self.q, self.g
@@ -99,28 +102,31 @@ class DSA():
             return None
         while True:
             k = randrange(2, self.q)
-            r = pow(self.g, k, self.p) % self.q
-            m = int(sha1(M).hexdigest(), 16)
+            self.r = pow(self.g, k, self.p) % self.q
+            m = int(sha1(str.encode(M, "ascii")).hexdigest(), 16)
             try:
-                s = (self.test.modinv(k, self.q) * (m + self.x * r)) % self.q
-                return r, s
+                self.s = (self.test.modinv(k, self.q) * (m + self.x * self.r)) % self.q
+                return k, m, self.r, self.s
             except ZeroDivisionError:
                 pass
     
-    def verify(self, M, r, s):
+    def calculate_params(self, M):
         if not self.__validate_params():
             return 'Invalid'
-        if not self.__validate_sign(r, s):
+        if not self.__validate_sign():
             return False
         try:
-            w = self.test.modinv(s, self.q)
+            w = self.test.modinv(self.s, self.q)
         except ZeroDivisionError:
             return False
-        m = int(sha1(M).hexdigest(), 16)
+        m = int(sha1(str.encode(M, "ascii")).hexdigest(), 16)
         u1 = (m * w) % self.q
-        u2 = (r * w) % self.q
-        v = (pow(self.g, u1, self.p) * pow(self.y, u2, self.p)) % self.p % self.q
-        if v == r:
+        u2 = (self.r * w) % self.q
+        self.v = (pow(self.g, u1, self.p) * pow(self.y, u2, self.p)) % self.p % self.q
+        return m, w, u1, u2, self.v
+    
+    def verify(self):
+        if self.v == self.r:
             return True
         return False
     
@@ -132,7 +138,7 @@ if __name__ == '__main__':
     p, q, g = dsa.generate_params(L, N)
     x, y = dsa.generate_keys()
     
-    text = "ASCII"
+    text = "RTU MIREA"
     M = str.encode(text, "ascii")
     r, s = dsa.sign(M)
     if dsa.verify(M, r, s):
