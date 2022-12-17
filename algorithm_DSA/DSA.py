@@ -54,15 +54,6 @@ class DSA():
                         return p, q
                 i += 1
                 j += n + 1
-        #while True:
-        #    q = randint(2**(N-1), 2**N-1)
-        #    if not self.test.is_prime(q):
-        #        continue
-        #    for p in range(2**(L-1), 2**L-1, 2):
-        #        if (p-1)%q == 0 and self.test.is_prime(p):
-        #            self.p = p
-        #            self.q = q
-        #            return p, q
 
     def __generate_g(self):
         while True:
@@ -130,17 +121,3 @@ class DSA():
             return True
         return False
     
-if __name__ == '__main__':
-    N = 160
-    L = 1024
-    dsa = DSA()
-    #print(dsa.generate_params(1024, 160))
-    p, q, g = dsa.generate_params(L, N)
-    x, y = dsa.generate_keys()
-    
-    text = "RTU MIREA"
-    M = str.encode(text, "ascii")
-    r, s = dsa.sign(M)
-    if dsa.verify(M, r, s):
-        print('All ok')
-    print(M, r, s, p, q, g, 'Открытый\n', y, 'Закрытый\n', x, sep='\n')

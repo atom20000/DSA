@@ -42,8 +42,6 @@ class PrimeNumber():
         return True
 
     def test_miller(self, num): # тест Миллера
-        #if not self.test_trial_division_prime(num, sieve):
-        #    return False
         logN = log(num)
         loglogN = log(logN)
         maxChecked = logN * loglogN / log(2)
@@ -93,6 +91,7 @@ class PrimeNumber():
                 return False
         return True
 
+    # Обратный элемент по модулю 
     def modinv(self, a, m):
         g, x, y = self.__interactive_egcd(a,m)
         if g != 1:
@@ -103,7 +102,7 @@ class PrimeNumber():
     def __interactive_egcd(self, a, b):
         x,y, u,v = 0,1, 1,0
         while a != 0:
-            q,r = b//a,b%a; m,n = x-u*q,y-v*q # use x//y for floor "floor division"
+            q,r = b//a,b%a; m,n = x-u*q,y-v*q
             b,a, x,y, u,v = a,r, u,v, m,n
         return b, x, y
 
@@ -162,22 +161,3 @@ class PrimeNumber():
     
     def __next_prime(self, num):
         return self.sieve[self.sieve.index(num)+1]
-
-if __name__ == '__main__':
-    #print(test_trial_division(5, sieve_eratosthenes(1000)))
-    tests = PrimeNumber(1000)
-    n = 0
-    #while True:
-        #n = randrange(2**511, 2**512)
-        #n = random.randint(2**511, 2**1024 - 1)
-    for n in [16850784224551826771, 14042614733540932519]:
-        if tests.is_prime(n):#tests.test_trial_division_prime(n, tests.sieve): 
-        #if is_prime_miller(n, sieve):
-            print('простое', n)
-            #break
-        #print(n)
-        else:
-            print('составное', n)
-    #print(prime_factor())
-    #p = tests.find_number_p(n)
-    #print('q=', n, '\np=', p)

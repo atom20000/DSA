@@ -1,7 +1,7 @@
 from PyQt5.QtWidgets import QMainWindow, QFileDialog, QMessageBox
 from gui.MainWindow_ui import Ui_DSA
 from back.filemanager import WorkFile
-from algorithm_DSA.DSA import DSA
+from algorithm_DSA.DSA import DSA, sha1
 
 class Main(QMainWindow):
     
@@ -135,7 +135,7 @@ class Main(QMainWindow):
         path = QFileDialog.getSaveFileName(filter='Параметры (*.sign *.SIGN)')[0] #TODO Суффикс
         if path == '':
             return QMessageBox.information(self, self.windowTitle(), 'Пустой путь к файлу')
-        WorkFile(path).write({'text':self.M, 'y': self.dsa.y, 'r': self.dsa.r, 's': self.dsa.s})
+        WorkFile(path).write({'text':self.M, 'hash': int(sha1(str.encode(self.M, "ascii")).hexdigest(), 16), 'y': self.dsa.y, 'r': self.dsa.r, 's': self.dsa.s})
     
     def upload_params_reciver(self):
         path = QFileDialog.getOpenFileName(filter='Параметры (*.params *.PARAMS)')[0] #TODO Суффикс
@@ -156,12 +156,14 @@ class Main(QMainWindow):
         if path == '':
             return QMessageBox.information(self, self.windowTitle(), 'Пустой путь к файлу')
         data = WorkFile(path).read()
-        if data.get('text') is None or data.get('y') is None or data.get('r') is None or data.get('s') is None:
+        if data.get('text') is None or data.get('hash') is None or data.get('y') is None or data.get('r') is None or data.get('s') is None:
             return QMessageBox.critical(self, self.windowTitle(), 'Некорректный файл Подписи')
         self.M = data.get('text')
+        self.m = data.get('hash')
         self.dsa.y = data.get('y')
         self.dsa.r = data.get('r')
         self.dsa.s = data.get('s')
+        self.ui.HashMessageReciever.setText('Хэш сообщения:' + str(self.m))
         self.ui.publicKeySender.setText('Открытый ключ:' + str(self.dsa.y))
         self.ui.r_reciever.setText('r:' + str(self.dsa.r))
         self.ui.s_reciever.setText('s:' + str(self.dsa.s))
@@ -170,6 +172,8 @@ class Main(QMainWindow):
     @__check_params
     @__check_sign
     def calculate_params_reciever(self):
+        if self.m != int(sha1(str.encode(self.M, "ascii")).hexdigest(), 16):
+            return QMessageBox.critical(self, self.windowTitle(), 'Хеш значения не совпали')
         m, w, u1, u2, v = self.dsa.calculate_params(self.M)
         self.ui.HashMessageReciever.setText('Хэш сообщения:' + str(m))
         self.ui.w_Reciever.setText('w:' + str(w))
